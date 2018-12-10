@@ -26,12 +26,12 @@ CREATE TABLE books (
 );
 
 CREATE TABLE book_authors (
-	BookID INT PRIMARY KEY NOT NULL IDENTITY(1,1),
+	BookID INT NOT NULL,
 	AuthorName VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE book_copies (
-	BookID INT PRIMARY KEY NOT NULL IDENTITY(1,1),
+	BookID INT NOT NULL,
 	BranchID INT NOT NULL,
 	Number_Of_Copies INT NOT NULL
 );
@@ -98,35 +98,74 @@ VALUES
 ;
 
 INSERT INTO book_authors
-	(AuthorName)
+	(BookID, AuthorName)
 VALUES
-	('Casey Briar'),
-	('Hilary Kendall'),
-	('Cyan Sydney'),
-	('Lucrece London'),
-	('Sunny Temple'),
-	('Sequoia Emerson'),
-	('Florence Sage'),
-	('Leigh Rowan'),
-	('Zarathustra Arkadios'),
-	('Isidor Jirou'),
-	('Brook Dawson Diggory'),
-	('Stephen King'),
-	('Casey Briar'),
-	('Hilary Kendall'),
-	('Hilary Kendall'),
-	('Lucrece London'),
-	('Sunny Temple'),
-	('Sequoia Emerson'),
-	('Florence Sage'),
-	('Leigh Rowan'),
-	('Stephen King')
+	(1, 'Casey Briar'),
+	(2, 'Hilary Kendall'),
+	(3, 'Cyan Sydney'),
+	(4, 'Lucrece London'),
+	(5, 'Sunny Temple'),
+	(6, 'Sequoia Emerson'),
+	(7, 'Florence Sage'),
+	(8, 'Leigh Rowan'),
+	(9, 'Zarathustra Arkadios'),
+	(10, 'Isidor Jirou'),
+	(11, 'Brook Dawson Diggory'),
+	(12, 'Stephen King'),
+	(13, 'Casey Briar'),
+	(14, 'Hilary Kendall'),
+	(15, 'Hilary Kendall'),
+	(16, 'Lucrece London'),
+	(17, 'Sunny Temple'),
+	(18, 'Sequoia Emerson'),
+	(19, 'Florence Sage'),
+	(20, 'Leigh Rowan'),
+	(21, 'Stephen King')
 ;
 
 INSERT INTO book_copies
-	(BranchID, Number_of_Copies)
+	(BookID, BranchID, Number_of_Copies)
 VALUES
-	(
+	(1, 1, 3),
+	(2, 1, 3),
+	(4, 1, 3),
+	(6, 1, 5),
+	(12, 1, 4),
+	(14, 1, 2),
+	(18, 1, 2),
+	(19, 1, 3),
+	(20, 1, 4),
+	(21, 1, 2),
+	(3, 2, 2),
+	(5, 2, 3),
+	(7, 2, 2),
+	(10, 2, 2),
+	(11, 2, 4),
+	(13, 2, 2),
+	(15, 2, 2),
+	(16, 2, 4),
+	(17, 2, 2),
+	(1, 3, 2),
+	(3, 3, 3),
+	(9, 3, 2),
+	(12, 3, 4),
+	(14, 3, 4),
+	(15, 3, 5),
+	(17, 3, 2),
+	(18, 3, 3),
+	(19, 3, 2),
+	(20, 3, 5),
+	(2, 4, 2),
+	(4, 4, 3),
+	(6, 4, 2),
+	(12, 4, 4),
+	(14, 4, 4),
+	(16, 4, 5),
+	(17, 4, 2),
+	(18, 4, 3),
+	(19, 4, 2),
+	(20, 4, 5)
+;
 
 /* Select statements */
 
