@@ -37,7 +37,7 @@ CREATE TABLE book_copies (
 );
 
 CREATE TABLE book_loans (
-	BookID INT PRIMARY KEY NOT NULL IDENTITY(1,1),
+	BookID INT NOT NULL,
 	BranchID INT NOT NULL,
 	CardNo INT NOT NULL,
 	DateOut VARCHAR(50) NOT NULL,
@@ -166,6 +166,8 @@ VALUES
 	(19, 4, 2),
 	(20, 4, 5)
 ;
+
+/* Continue building book_loans and borrower */
 
 /* Select statements */
 
