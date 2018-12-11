@@ -135,12 +135,14 @@ VALUES
 	(18, 1, 2),
 	(19, 1, 3),
 	(20, 1, 4),
-	(21, 1, 2),
+    (21, 1, 3),
+	(21, 2, 3),
 	(3, 2, 2),
 	(5, 2, 3),
 	(7, 2, 2),
 	(10, 2, 2),
 	(11, 2, 4),
+	(12, 2, 5),
 	(13, 2, 2),
 	(15, 2, 2),
 	(16, 2, 4),
@@ -236,16 +238,124 @@ VALUES
 	('Stacy King', '99 Eisley Rd', '(503) 449-1222')
 ;
 
-/* Continue building book_loans and borrower */
+/* Create stored procedures */
 
-/* Select statements */
+/* #1 */
 
-SELECT * FROM library_branch;
-SELECT * FROM publisher;
-SELECT * FROM books;
-SELECT * FROM book_authors;
+USE db_library
+GO
 
-/* Miscellanious statements to delete later */
+CREATE PROCEDURE dbo.SelectBookLocation @Title nvarchar(100), @BranchName nvarchar(100)
+AS
+SELECT library_branch.BranchName AS 'Branch Name', books.Title AS 'Book Title', book_copies.Number_of_Copies AS 'Number of Copies'
+FROM library_branch
+INNER JOIN book_copies ON book_copies.BranchID = library_branch.BranchID
+INNER JOIN books ON books.BookID = book_copies.BookID
+WHERE books.Title LIKE @Title + '%'
+AND library_branch.BranchName LIKE @BranchName + '%'
+GO
 
-DROP TABLE book_authors;
-DROP TABLE books;
+/* #2 */
+
+USE db_library
+GO
+
+CREATE PROCEDURE dbo.SelectBookLocation @Title nvarchar(100), @BranchName nvarchar(100)
+AS
+SELECT library_branch.BranchName AS 'Branch Name', books.Title AS 'Book Title', book_copies.Number_of_Copies AS 'Number of Copies'
+FROM library_branch
+INNER JOIN book_copies ON book_copies.BranchID = library_branch.BranchID
+INNER JOIN books ON books.BookID = book_copies.BookID
+WHERE books.Title LIKE @Title + '%'
+AND library_branch.BranchName LIKE @BranchName + '%'
+GO
+
+/* #3 */
+
+USE db_library
+GO
+
+CREATE PROCEDURE dbo.BorrowedBookCount @BookCount NVARCHAR(4)
+AS
+SELECT borrower.Name AS 'Patron Name', borrower.CardNo AS 'Library Card Number', COUNT(book_loans.CardNo) AS 'Borrowed Books'
+FROM borrower
+LEFT JOIN book_loans ON book_loans.CardNo = borrower.CardNo
+GROUP BY borrower.Name, borrower.Address, borrower.Phone, borrower.CardNo
+HAVING COUNT(book_loans.CardNo) LIKE @BookCount + '%'
+GO
+
+/* #4 */
+
+USE db_library
+GO
+
+CREATE PROCEDURE dbo.DateDue @BranchName NVARCHAR(100), @DateDue NVARCHAR(100)
+AS
+SELECT library_branch.BranchName, book_loans.DateDue, books.Title, borrower.Name, borrower.Address
+FROM library_branch
+INNER JOIN book_loans ON book_loans.BranchID = library_branch.BranchID
+INNER JOIN books ON books.BookID = book_loans.BookID
+INNER JOIN borrower ON borrower.CardNo = book_loans.CardNo
+WHERE library_branch.BranchName LIKE @BranchName + '%'
+AND book_loans.DateDue LIKE @DateDue + '%'
+GO
+
+/* #5 */
+
+USE db_library
+GO
+
+CREATE PROC dbo.BookCount @BranchName NVARCHAR(100)
+AS
+SELECT library_branch.BranchName AS 'Branch Name', COUNT(book_loans.CardNo) AS 'Borrowed Books'
+FROM library_branch
+INNER JOIN book_loans ON book_loans.BranchID = library_branch.BranchID
+GROUP BY library_branch.BranchName
+HAVING library_branch.BranchName LIKE @BranchName + '%'
+GO
+
+/* #6 */
+
+USE db_library
+GO
+
+CREATE PROC dbo.CountBorrowedBook @BorrowedBooks INT
+AS
+SELECT borrower.Name AS 'Borrower Name', borrower.Address 'Borrower Address',  COUNT(book_loans.CardNo) AS 'Borrowed Books'
+FROM borrower
+INNER JOIN book_loans ON book_loans.CardNo = borrower.CardNo
+GROUP BY borrower.Name, borrower.Address
+HAVING COUNT(book_loans.CardNo) > @BorrowedBooks
+GO
+
+/* #7 */
+
+USE db_library
+Go
+
+CREATE PROC dbo.GetAuthors @AuthorName NVARCHAR(100), @LibraryBranch NVARCHAR(100)
+AS
+SELECT book_authors.AuthorName AS 'Author Name', books.Title AS 'Book Title', book_copies.Number_Of_Copies AS 'Numbers of Copies', library_branch.BranchName AS 'Branch Name'
+FROM book_authors
+INNER JOIN books ON books.BookID = book_authors.BookID
+INNER JOIN book_copies ON book_copies.BookID = books.BookID
+INNER JOIN library_branch ON library_branch.BranchID = book_copies.BranchID
+WHERE book_authors.AuthorName LIKE @AuthorName + '%'
+AND library_branch.BranchName LIKE @LibraryBranch + '%'
+GO
+
+/* Query statements for stored procedures */
+
+EXEC dbo.SelectBookLocation @Title = 'The Lost Tribe', @BranchName = 'Sharpstown';
+
+EXEC dbo.SelectBookLocation @Title = 'The Lost Tribe', @BranchName = '%';
+
+EXEC dbo.BorrowedBookCount @BookCount = 0;
+
+EXEC dbo.DateDue @BranchName = 'Sharpstown', @DateDue = '12/11/2018';
+
+EXEC dbo.BookCount @BranchName = 'Central'
+
+EXEC dbo.CountBorrowedBook @BorrowedBooks = 5;
+
+EXEC dbo.GetAuthors @AuthorName = 'Stephen King', @LibraryBranch = 'Central';
