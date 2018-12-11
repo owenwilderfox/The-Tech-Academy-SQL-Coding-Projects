@@ -167,6 +167,24 @@ VALUES
 	(20, 4, 5)
 ;
 
+INSERT INTO borrower
+	(Name, Address, Phone)
+VALUES
+	('Gregory Alan Isakov', '2020 Evening Machines Way', '(503) 246-8345'),
+	('Florence Leontine Mary Welch', '100 Ceremonials St', '(503) 285-3451'),
+	('Rufus Wainwright', '3984 Poses Ct', '(971) 230-2231'), 
+	('Antony Hegarty', '50 Swanlights Way', '(503) 231-1100'),
+	('Ben Schneider', '482 Strange Tails Ave', '(503) 187-2012'),
+	('Myra Ellen Amos', '1990 Little Earthquakes Ct', '(971) 808-1299'),
+	('Björk Guðmundsdóttir', '314 Vespertine St', '(503) 245-1960'),
+	('Thom Yorke', '710 The Bends Ave', '(503) 232-3451')
+;
+
+/* INSERT INTO book_loans
+	(BookID, BranchID, CardNo, DateOut, DateDue)
+VALUES */
+
+
 /* Continue building book_loans and borrower */
 
 /* Select statements */
