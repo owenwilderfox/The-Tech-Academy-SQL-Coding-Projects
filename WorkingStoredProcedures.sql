@@ -64,3 +64,21 @@ AND book_loans.DateDue LIKE @DateDue + '%'
 GO
 
 EXEC dbo.DateDue @BranchName = 'Sharpstown', @DateDue = '12/11/2018';
+
+/* 5.) For each library branch, retrieve the branch name and the total number of books loaned out from that branch. */
+
+USE db_library
+GO
+
+CREATE PROC dbo.BookCount @BranchName NVARCHAR(100)
+AS
+SELECT library_branch.BranchName AS 'Branch Name', COUNT(book_loans.CardNo) AS 'Borrowed Books'
+FROM library_branch
+INNER JOIN book_loans ON book_loans.BranchID = library_branch.BranchID
+GROUP BY library_branch.BranchName
+HAVING library_branch.BranchName LIKE @BranchName + '%'
+GO
+
+EXEC dbo.BookCount @BranchName = 'Central'
+
+/* 6.) Retrieve the names, addresses, and the number of books checked out for all borrowers who have more than five books checked out. */
