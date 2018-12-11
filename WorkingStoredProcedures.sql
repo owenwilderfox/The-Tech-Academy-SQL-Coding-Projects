@@ -82,3 +82,36 @@ GO
 EXEC dbo.BookCount @BranchName = 'Central'
 
 /* 6.) Retrieve the names, addresses, and the number of books checked out for all borrowers who have more than five books checked out. */
+
+USE db_library
+GO
+
+CREATE PROC dbo.CountBorrowedBook @BorrowedBooks INT
+AS
+SELECT borrower.Name AS 'Borrower Name', borrower.Address 'Borrower Address',  COUNT(book_loans.CardNo) AS 'Borrowed Books'
+FROM borrower
+INNER JOIN book_loans ON book_loans.CardNo = borrower.CardNo
+GROUP BY borrower.Name, borrower.Address
+HAVING COUNT(book_loans.CardNo) > @BorrowedBooks
+GO
+
+EXEC dbo.CountBorrowedBook @BorrowedBooks = 5;
+
+
+/* 7.) For each book authored (or co-authored) by "Stephen King", retrieve the title and the number of copies owned by the library branch whose name is "Central". */
+
+USE db_library
+Go
+
+CREATE PROC dbo.GetAuthors @AuthorName NVARCHAR(100), @LibraryBranch NVARCHAR(100)
+AS
+SELECT book_authors.AuthorName AS 'Author Name', books.Title AS 'Book Title', book_copies.Number_Of_Copies AS 'Numbers of Copies', library_branch.BranchName AS 'Branch Name'
+FROM book_authors
+INNER JOIN books ON books.BookID = book_authors.BookID
+INNER JOIN book_copies ON book_copies.BookID = books.BookID
+INNER JOIN library_branch ON library_branch.BranchID = book_copies.BranchID
+WHERE book_authors.AuthorName LIKE @AuthorName + '%'
+AND library_branch.BranchName LIKE @LibraryBranch + '%'
+GO
+
+EXEC dbo.GetAuthors @AuthorName = 'Stephen King', @LibraryBranch = 'Central';
