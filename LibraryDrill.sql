@@ -1,6 +1,6 @@
 /* Create and use database  */
 
--- CREATE DATABASE db_library
+CREATE DATABASE db_library
 
 USE db_library
 GO
