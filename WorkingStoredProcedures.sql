@@ -46,3 +46,21 @@ HAVING COUNT(book_loans.CardNo) LIKE @BookCount + '%'
 GO
 
 EXEC dbo.BorrowedBookCount @BookCount = 0;
+
+/* 4.) For each book that is loaned out from the "Sharpstown" branch and whose DueDate is today, retrieve the book title, the borrower's name, and the borrower's address. */
+
+USE db_library
+GO
+
+CREATE PROCEDURE dbo.DateDue @BranchName NVARCHAR(100), @DateDue NVARCHAR(100)
+AS
+SELECT library_branch.BranchName, book_loans.DateDue, books.Title, borrower.Name, borrower.Address
+FROM library_branch
+INNER JOIN book_loans ON book_loans.BranchID = library_branch.BranchID
+INNER JOIN books ON books.BookID = book_loans.BookID
+INNER JOIN borrower ON borrower.CardNo = book_loans.CardNo
+WHERE library_branch.BranchName LIKE @BranchName + '%'
+AND book_loans.DateDue LIKE @DateDue + '%'
+GO
+
+EXEC dbo.DateDue @BranchName = 'Sharpstown', @DateDue = '12/11/2018';
