@@ -13,7 +13,7 @@ WHERE books.Title LIKE @Title + '%'
 AND library_branch.BranchName LIKE @BranchName + '%'
 GO
 
-EXEC dbo.SelectBookLocation @Title = 'The Lost Tribe', @BranchName = '%';
+EXEC dbo.SelectBookLocation @Title = 'The Lost Tribe', @BranchName = 'Sharpstown';
 
 /* 2.) How many copies of the book titled "The Lost Tribe" are owned by each library branch? */
 
