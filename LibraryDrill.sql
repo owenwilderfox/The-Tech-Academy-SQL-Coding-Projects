@@ -354,7 +354,7 @@ EXEC dbo.BorrowedBookCount @BookCount = 0;
 
 EXEC dbo.DateDue @BranchName = 'Sharpstown', @DateDue = '12/11/2018';
 
-EXEC dbo.BookCount @BranchName = 'Central'
+EXEC dbo.BookCount @BranchName = '%'
 
 EXEC dbo.CountBorrowedBook @BorrowedBooks = 5;
 
